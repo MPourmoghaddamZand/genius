@@ -54,6 +54,52 @@ app.get('/orders', (req, res) => {
         res.json(orders);
     });
 });
+app.get('/orders/:id', (req, res) => {
+    const orderId = Number(req.params.id);  // شناسه سفارش رو از پارامتر URL می‌گیریم
+
+    fs.readFile('./data/orders.json', 'utf8', (err, data) => {
+        if (err) return res.status(500).send('خطا در خواندن سفارش‌ها');
+
+        const orders = JSON.parse(data || '[]');
+        const order = orders.find(o => o.id === orderId);
+
+        if (!order) {
+            return res.status(404).send('سفارشی با این شناسه یافت نشد');
+        }
+
+        res.json(order);  // ارسال سفارش به کاربر
+    });
+});
+
+app.put('/orders/:id', (req, res) => {
+    console.log(req.body); // بررسی محتوای درخواست
+    const orderId = Number(req.params.id);
+    const { status } = req.body;
+
+    if (!status) {
+        return res.status(400).send('وضعیت جدید ارسال نشده است');
+    }
+
+    fs.readFile('./data/orders.json', 'utf8', (err, data) => {
+        if (err) return res.status(500).send('خطا در خواندن سفارش‌ها');
+
+        let orders = JSON.parse(data || '[]');
+        const orderIndex = orders.findIndex(o => o.id === orderId);
+
+        if (orderIndex === -1) {
+            return res.status(404).send('سفارشی با این شناسه یافت نشد');
+        }
+
+        orders[orderIndex].status = status;
+
+        fs.writeFile('./data/orders.json', JSON.stringify(orders, null, 2), err => {
+            if (err) return res.status(500).send('خطا در ذخیره تغییرات');
+            res.json(orders[orderIndex]);
+        });
+    });
+});
+
+
 app.listen(PORT, () => {
     console.log(`✅ Server Running at http://localhost:${PORT}`);
 });
