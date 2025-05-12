@@ -6,10 +6,10 @@ A full-stack web application for managing and browsing a digital cafe menu. Buil
 
 - 🧾 View full cafe menu (drinks, desserts, snacks)
 - ✏️ Admin dashboard to add, edit, or delete items
-- 🔍 Search and filter menu items by category or price
+- 🔍 filter menu items by category or price
 - 🖼️ Upload and display item images
 - 💬 Contact form for feedback or suggestions
-- 📱 Responsive design for mobile & desktop
+- 📱 App design for mobile.
 
 ## 🛠️ Tech Stack
 
